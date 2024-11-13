@@ -1,49 +1,36 @@
-import React, {useState} from 'react';
+import React from 'react';
 import * as eva from '@eva-design/eva';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
-import {Image, SafeAreaView, StyleSheet} from 'react-native';
 import {
   ApplicationProvider,
-  Button,
+  Icon,
+  // Button,
   IconRegistry,
-  Layout,
-  Text,
+  // Layout,
+  // Text,
 } from '@ui-kitten/components';
-import {storage} from './db/mmkv';
-import {useTranslation} from 'react-i18next';
+// import {storage} from './db/mmkv';
+// import {useTranslation} from 'react-i18next';
 import {ThemeContext} from './style/theme-context';
-import ThemeSwitcher from './components/ThemeSwitcher';
+// import ThemeSwitcher from './components/ThemeSwitcher';
 import {lightTheme} from './style/custom-theme-light';
 import {darkTheme} from './style/custom-theme-dark';
+import {NavigationContainer} from '@react-navigation/native';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+import HomeScreen from './screens/HomeScreen';
+import SettingsScreen from './screens/SettingsScreen';
+import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {
+  darkNavigationTheme,
+  lightNavigationTheme,
+} from './style/navigationThemes';
+import PersonalTasksScreen from './screens/PersonalTasksScreen';
+import GreenTasksScreen from './screens/GreenTasksScreen';
 
-// @ui-kitten/eva-icons
+const Tab = createBottomTabNavigator();
 
 function App(): React.JSX.Element {
   const [theme, setTheme] = React.useState('light');
-
-  const [counter, setCounter] = useState(0);
-
-  const [sampleState, setSampleState] = useState({
-    username: '',
-    age: 0,
-    isMmkvFastAsf: false,
-  });
-
-  const {t} = useTranslation();
-
-  function writeData() {
-    storage.set('user.name', 'Marc');
-    storage.set('user.age', 21);
-    storage.set('is-mmkv-fast-asf', true);
-  }
-
-  function readDataSetState() {
-    const username = storage.getString('user.name');
-    const age = storage.getNumber('user.age');
-    const isMmkvFastAsf = storage.getBoolean('is-mmkv-fast-asf');
-
-    setSampleState({username, age, isMmkvFastAsf});
-  }
 
   const toggleTheme = () => {
     const nextTheme = theme === 'light' ? 'dark' : 'light';
@@ -52,41 +39,45 @@ function App(): React.JSX.Element {
 
   const currentTheme = theme === 'light' ? lightTheme : darkTheme;
 
+  const currentNavigationTheme =
+    theme === 'dark' ? darkNavigationTheme : lightNavigationTheme;
+
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
       <ThemeContext.Provider value={{theme, toggleTheme}}>
         <ApplicationProvider {...eva} theme={currentTheme}>
-          <SafeAreaView>
-            <Image
-              source={require('./assets/logo_task4good_png.png')}
-              style={styles.logo}
-            />
-            <Layout style={styles.container} level="1">
-              <Button onPress={() => setCounter(counter + 1)}>Count</Button>
-              <Text style={styles.text}>{`Pressed ${counter} times`}</Text>
-              <Button
-                onPress={() => {
-                  writeData();
+          <SafeAreaProvider>
+            <NavigationContainer theme={currentNavigationTheme}>
+              <Tab.Navigator
+                screenOptions={{
+                  headerShown: false,
+                  tabBarActiveTintColor: currentTheme['color-primary-500'],
+                  tabBarInactiveTintColor: currentTheme['color-basic-400'],
+                  tabBarStyle: {
+                    backgroundColor: currentTheme['color-basic-100'],
+                  },
                 }}>
-                Set Data
-              </Button>
-              <Button
-                onPress={() => {
-                  readDataSetState();
-                }}>
-                Read Data
-              </Button>
-              <Text
-                style={
-                  styles.text
-                }>{`State is: ${sampleState.username}, ${sampleState.age}, ${sampleState.isMmkvFastAsf}`}</Text>
-              <Text style={styles.text}>{`Language is set to ${t(
-                'lang',
-              )}`}</Text>
-              <ThemeSwitcher />
-            </Layout>
-          </SafeAreaView>
+                {/* //TODO: Tradurre label */}
+                <Tab.Screen
+                  name="Home"
+                  component={HomeScreen}
+                  options={{
+                    title: 'My profile',
+                    tabBarIcon: ({size, focused, color}) => {
+                      return <Icon fill="#8F9BB3" name="home" />;
+                    },
+                  }}
+                />
+                <Tab.Screen
+                  name="PersonalTasks"
+                  component={PersonalTasksScreen}
+                />
+                <Tab.Screen name="GreenTasks" component={GreenTasksScreen} />
+                <Tab.Screen name="Settings" component={SettingsScreen} />
+              </Tab.Navigator>
+            </NavigationContainer>
+          </SafeAreaProvider>
         </ApplicationProvider>
       </ThemeContext.Provider>
     </>
@@ -94,22 +85,3 @@ function App(): React.JSX.Element {
 }
 
 export default App;
-
-const styles = StyleSheet.create({
-  logo: {
-    margin: 'auto',
-    width: '50%',
-    height: '50%',
-  },
-  container: {
-    width: '100%',
-    margin: 'auto',
-    padding: 1,
-    flexDirection: 'column',
-    alignItems: 'center',
-    gap: 8,
-  },
-  text: {
-    marginHorizontal: 8,
-  },
-});
