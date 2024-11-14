@@ -1,6 +1,11 @@
 import {Text} from '@ui-kitten/components';
 import React from 'react';
+import {SafeAreaView} from 'react-native';
 
 export default function SettingsScreen() {
-  return <Text>SettingsScreen</Text>;
+  return (
+    <SafeAreaView>
+      <Text>SettingsScreen</Text>
+    </SafeAreaView>
+  );
 }

@@ -1,6 +1,11 @@
 import {Text} from '@ui-kitten/components';
 import React from 'react';
+import {SafeAreaView} from 'react-native';
 
 export default function PersonalTasksScreen() {
-  return <Text>PersonalTasksScreen</Text>;
+  return (
+    <SafeAreaView>
+      <Text>Personal</Text>
+    </SafeAreaView>
+  );
 }
