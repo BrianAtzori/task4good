@@ -1,5 +1,12 @@
 {
   "translation": {
-    "lang": "it"
+    "personalTasksLabel": "Personali",
+    "greenTasksLabel": "Ambiente",
+    "settingsLabel": "Impostazioni",
+    "availableSettingLanguageLabel": "Lingua",
+    "availableSettingLanguageDescription": "ITA, ESP, FRA, ENG",
+    "availableSettingThemeLabel": "Tema scuro",
+    "availableSettingThemeDescription": "Scegli tra chiaro e scuro",
+    "selectOptionLabel": "Scegli un'opzione"
   }
 }
