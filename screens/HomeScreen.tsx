@@ -1,8 +1,6 @@
 import {Image, SafeAreaView, StyleSheet} from 'react-native';
 import {Button, Layout, Text} from '@ui-kitten/components';
 import React, {useState} from 'react';
-import ThemeSwitcher from '../components/ThemeSwitcher';
-import {useTranslation} from 'react-i18next';
 import {storage} from '../db/mmkv';
 
 function HomeScreen() {
@@ -13,8 +11,6 @@ function HomeScreen() {
     age: 0,
     isMmkvFastAsf: false,
   });
-
-  const {t} = useTranslation();
 
   function writeData() {
     storage.set('user.name', 'Marc');
@@ -56,8 +52,6 @@ function HomeScreen() {
             style={
               styles.text
             }>{`State is: ${sampleState.username}, ${sampleState.age}, ${sampleState.isMmkvFastAsf}`}</Text>
-          <Text style={styles.text}>{`Language is set to ${t('lang')}`}</Text>
-          <ThemeSwitcher />
         </Layout>
       </SafeAreaView>
     </>
