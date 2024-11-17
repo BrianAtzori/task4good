@@ -1,9 +1,10 @@
-import {Divider, Layout, List, ListItem, Text} from '@ui-kitten/components';
+import {Divider, Layout, List, ListItem} from '@ui-kitten/components';
 import {t} from 'i18next';
 import React from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import {LanguageSwitcher} from '../components/settings/LanguageSwitcher';
 import ThemeSwitcher from '../components/settings/ThemeSwitcher';
+import PageTitleComponent from '../components/shared/PageTitleComponent';
 
 export default function SettingsScreen() {
   const availableSettings = [
@@ -39,9 +40,7 @@ export default function SettingsScreen() {
   return (
     <SafeAreaView>
       <Layout>
-        <Text style={styles.title} category="h1">
-          {t('settingsLabel')}
-        </Text>
+        <PageTitleComponent title="settingsLabel" />
         <List
           data={availableSettings}
           renderItem={renderSetting}
@@ -56,9 +55,6 @@ export default function SettingsScreen() {
 }
 
 const styles = StyleSheet.create({
-  title: {
-    padding: 16,
-  },
   listItemContainer: {
     minHeight: 100,
   },
