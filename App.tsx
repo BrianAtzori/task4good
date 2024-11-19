@@ -21,6 +21,7 @@ import HomeIcon from './style/icons/HomeIcon';
 import GreenTaskIcon from './style/icons/GreenTasksIcon';
 import PersonalTaskIcon from './style/icons/PersonalTaskIcon';
 import {t} from 'i18next';
+import AddTaskButton from './components/tasks/AddTaskButton';
 
 const Tab = createBottomTabNavigator();
 
@@ -102,6 +103,7 @@ function App(): React.JSX.Element {
                 />
               </Tab.Navigator>
             </NavigationContainer>
+            <AddTaskButton />
           </SafeAreaProvider>
         </ApplicationProvider>
       </ThemeContext.Provider>

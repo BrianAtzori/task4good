@@ -8,6 +8,8 @@
     "availableSettingLanguageDescription": "ITA, ESP, FRA, ENG",
     "availableSettingThemeLabel": "Tema scuro",
     "availableSettingThemeDescription": "Scegli tra chiaro e scuro",
-    "selectOptionLabel": "Scegli un'opzione"
+    "selectOptionLabel": "Scegli un'opzione",
+    "tasksOnlyCompleted": "Mostra solo completate",
+    "tasksAll": "Mostra tutte le attività"
   }
 }

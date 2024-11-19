@@ -4,52 +4,29 @@ import {SafeAreaView, StyleSheet} from 'react-native';
 import PageTitleComponent from '../components/shared/PageTitleComponent';
 import TaskListComponent from '../components/tasks/TaskListComponent';
 import {Task} from '../utils/interfaces/interfaces';
-import uuid from 'react-native-uuid';
+import {t} from 'i18next';
+import {getTasks} from '../utils/functions/tasks';
 
 export default function PersonalTasksScreen() {
-  const [sampleTasks, setSampleTasks] = useState<Task[]>([
-    {
-      id: uuid.v4(),
-      name: `Porta fuori Iggy`,
-      category: 'personal',
-      completed: true,
-    },
-    {
-      id: uuid.v4(),
-      name: `Scendi il cane`,
-      category: 'personal',
-      completed: false,
-    },
-    {
-      id: uuid.v4(),
-      name: `Fai popo`,
-      category: 'green',
-      completed: true,
-    },
-    {
-      id: uuid.v4(),
-      name: `Fai la bamba`,
-      category: 'green',
-      completed: true,
-    },
-    {
-      id: uuid.v4(),
-      name: `Bevi`,
-      category: 'personal',
-      completed: true,
-    },
-  ]);
-
+  const [personalTasks, setPersonalTasks] = useState<Task[]>([]);
   const [showOnlyNotCompleted, setShowOnlyNotCompleted] =
     useState<boolean>(false);
 
   useEffect(() => {
-    setSampleTasks(
-      sampleTasks.filter(task =>
-        showOnlyNotCompleted ? !task.completed : true,
-      ),
+    getTasks([{property: 'category', value: 'personal'}]).then(
+      (taskList: Task[]) => {
+        setPersonalTasks(taskList);
+      },
     );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    getTasks([
+      {property: 'category', value: 'personal'},
+      {property: 'completed', value: showOnlyNotCompleted},
+    ]).then((taskList: Task[]) => {
+      setPersonalTasks(taskList);
+    });
   }, [showOnlyNotCompleted]);
 
   return (
@@ -61,14 +38,15 @@ export default function PersonalTasksScreen() {
             setShowOnlyNotCompleted(!showOnlyNotCompleted);
           }}
           checked={showOnlyNotCompleted}
-          style={styles.completedToggle}
-        />
-        <TaskListComponent type="personal" tasks={sampleTasks} />
+          style={styles.completedToggle}>
+          {t('tasksOnlyCompleted')}
+        </Toggle>
+        <TaskListComponent type="personal" tasks={personalTasks} />
       </Layout>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  completedToggle: {alignSelf: 'flex-end', marginRight: 8},
+  completedToggle: {alignSelf: 'flex-end', margin: 8},
 });

@@ -29,7 +29,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 16,
   },
-  iconButton: {
-    borderRadius: 32,
-  },
+  iconButton: {},
 });
