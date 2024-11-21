@@ -4,11 +4,16 @@ import EditIcon from '../../style/icons/EditIcon';
 import DeleteIcon from '../../style/icons/DeleteIcon';
 import {StyleSheet} from 'react-native';
 import DoneIcon from '../../style/icons/DoneIcon';
+import {deleteTask} from '../../utils/functions/tasks';
 
 export default function TaskActionsButtons({
   isCompleted,
+  taskId,
+  tasksUpdateAction,
 }: {
   isCompleted: boolean;
+  taskId: string;
+  tasksUpdateAction: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   return (
     <Layout style={styles.container}>
@@ -19,7 +24,14 @@ export default function TaskActionsButtons({
         </>
       )}
 
-      <Button style={styles.iconButton} accessoryLeft={<DeleteIcon />} />
+      <Button
+        style={styles.iconButton}
+        onPress={() => {
+          deleteTask(taskId);
+          tasksUpdateAction(true);
+        }}
+        accessoryLeft={<DeleteIcon />}
+      />
     </Layout>
   );
 }

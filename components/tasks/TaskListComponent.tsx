@@ -5,9 +5,11 @@ import TaskActionsButtons from './TaskActionsButtons';
 
 export default function TaskListComponent({
   tasks,
+  tasksSubscriber,
 }: {
   tasks: Task[];
   type: 'personal' | 'green' | 'home';
+  tasksSubscriber: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const renderTask = ({item}: {item: Task}): React.ReactElement => {
     return (
@@ -15,7 +17,13 @@ export default function TaskListComponent({
         disabled
         key={item.id}
         title={`${item.name}`}
-        accessoryRight={<TaskActionsButtons isCompleted={item.completed} />}
+        accessoryRight={
+          <TaskActionsButtons
+            taskId={item.id}
+            isCompleted={item.completed}
+            tasksUpdateAction={tasksSubscriber}
+          />
+        }
       />
     );
   };

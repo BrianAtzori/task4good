@@ -1,11 +1,24 @@
 import {Button, Card, Modal} from '@ui-kitten/components';
-import {SafeAreaView, StyleSheet, Text} from 'react-native';
+import {SafeAreaView, StyleSheet} from 'react-native';
 import React from 'react';
 import {useDispatch} from 'react-redux';
 import {toggleDrawer} from '../../redux/features/drawer/drawerSlice';
+import {createTask} from '../../utils/functions/tasks';
+import uuid from 'react-native-uuid';
 
 export default function TaskManagerModalComponent({isOpen}: {isOpen: boolean}) {
   const dispatch = useDispatch();
+
+  function tempOnClick() {
+    createTask({
+      id: uuid.v4(),
+      name: 'Cane',
+      completed: true,
+      category: 'personal',
+    });
+
+    //TODO: Use Redux to handle global updates, change state handling in task view
+  }
 
   return (
     <Modal
@@ -14,7 +27,9 @@ export default function TaskManagerModalComponent({isOpen}: {isOpen: boolean}) {
       style={styles.modal}>
       <SafeAreaView style={styles.safeArea}>
         <Card disabled={true}>
-          <Text>Questo è il contenuto del dialog!</Text>
+          <Button style={styles.addButton} onPress={() => tempOnClick()}>
+            Crea Task
+          </Button>
           <Button onPress={() => dispatch(toggleDrawer())}>Chiudi</Button>
         </Card>
       </SafeAreaView>
@@ -33,6 +48,9 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     justifyContent: 'flex-end',
+  },
+  addButton: {
+    marginBottom: 8,
   },
   backdrop: {
     backgroundColor: 'rgba(0, 0, 0, 0.5)',

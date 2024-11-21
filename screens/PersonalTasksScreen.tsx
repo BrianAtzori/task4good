@@ -9,16 +9,17 @@ import {getTasks} from '../utils/functions/tasks';
 
 export default function PersonalTasksScreen() {
   const [personalTasks, setPersonalTasks] = useState<Task[]>([]);
+  const [tasksChanged, setTasksChanged] = useState<boolean>(false);
   const [showOnlyNotCompleted, setShowOnlyNotCompleted] =
     useState<boolean>(false);
 
-  useEffect(() => {
-    getTasks([{property: 'category', value: 'personal'}]).then(
-      (taskList: Task[]) => {
-        setPersonalTasks(taskList);
-      },
-    );
-  }, []);
+  // useEffect(() => {
+  //   getTasks([{property: 'category', value: 'personal'}]).then(
+  //     (taskList: Task[]) => {
+  //       setPersonalTasks(taskList);
+  //     },
+  //   );
+  // }, [tasksChanged]);
 
   useEffect(() => {
     getTasks([
@@ -26,8 +27,9 @@ export default function PersonalTasksScreen() {
       {property: 'completed', value: showOnlyNotCompleted},
     ]).then((taskList: Task[]) => {
       setPersonalTasks(taskList);
+      setTasksChanged(false);
     });
-  }, [showOnlyNotCompleted]);
+  }, [showOnlyNotCompleted, tasksChanged]);
 
   return (
     <SafeAreaView>
@@ -41,7 +43,11 @@ export default function PersonalTasksScreen() {
           style={styles.completedToggle}>
           {t('tasksOnlyCompleted')}
         </Toggle>
-        <TaskListComponent type="personal" tasks={personalTasks} />
+        <TaskListComponent
+          type="personal"
+          tasks={personalTasks}
+          tasksSubscriber={setTasksChanged}
+        />
       </Layout>
     </SafeAreaView>
   );
