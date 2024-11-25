@@ -4,22 +4,31 @@ import EditIcon from '../../style/icons/EditIcon';
 import DeleteIcon from '../../style/icons/DeleteIcon';
 import {StyleSheet} from 'react-native';
 import DoneIcon from '../../style/icons/DoneIcon';
-import {deleteTask} from '../../utils/functions/tasks';
+import {deleteTask, editTask} from '../../utils/functions/tasks';
+import {useDispatch} from 'react-redux';
+import {updateTasksState} from '../../redux/features/tasks/tasksSlice';
 
 export default function TaskActionsButtons({
   isCompleted,
   taskId,
-  tasksUpdateAction,
 }: {
   isCompleted: boolean;
   taskId: string;
-  tasksUpdateAction: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
+  const dispatch = useDispatch();
+
   return (
     <Layout style={styles.container}>
       {!isCompleted && (
         <>
-          <Button style={styles.iconButton} accessoryLeft={<DoneIcon />} />
+          <Button
+            style={styles.iconButton}
+            accessoryLeft={<DoneIcon />}
+            onPress={() => {
+              editTask(taskId, {completed: true});
+              dispatch(updateTasksState(true));
+            }}
+          />
           <Button style={styles.iconButton} accessoryLeft={<EditIcon />} />
         </>
       )}
@@ -28,7 +37,7 @@ export default function TaskActionsButtons({
         style={styles.iconButton}
         onPress={() => {
           deleteTask(taskId);
-          tasksUpdateAction(true);
+          dispatch(updateTasksState(true));
         }}
         accessoryLeft={<DeleteIcon />}
       />

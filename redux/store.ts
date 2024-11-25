@@ -1,9 +1,11 @@
 import {configureStore} from '@reduxjs/toolkit';
 import drawerReducer from './features/drawer/drawerSlice';
+import taskReducer from './features/tasks/tasksSlice';
 
 export const store = configureStore({
   reducer: {
     drawer: drawerReducer,
+    tasks: taskReducer,
   },
 });
 

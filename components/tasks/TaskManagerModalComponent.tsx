@@ -5,6 +5,7 @@ import {useDispatch} from 'react-redux';
 import {toggleDrawer} from '../../redux/features/drawer/drawerSlice';
 import {createTask} from '../../utils/functions/tasks';
 import uuid from 'react-native-uuid';
+import {updateTasksState} from '../../redux/features/tasks/tasksSlice';
 
 export default function TaskManagerModalComponent({isOpen}: {isOpen: boolean}) {
   const dispatch = useDispatch();
@@ -13,11 +14,10 @@ export default function TaskManagerModalComponent({isOpen}: {isOpen: boolean}) {
     createTask({
       id: uuid.v4(),
       name: 'Cane',
-      completed: true,
+      completed: false,
       category: 'personal',
     });
-
-    //TODO: Use Redux to handle global updates, change state handling in task view
+    dispatch(updateTasksState(true));
   }
 
   return (

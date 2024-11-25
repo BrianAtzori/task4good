@@ -6,20 +6,18 @@ import TaskListComponent from '../components/tasks/TaskListComponent';
 import {Task} from '../utils/interfaces/interfaces';
 import {t} from 'i18next';
 import {getTasks} from '../utils/functions/tasks';
+import {RootState} from '../redux/store';
+import {useDispatch, useSelector} from 'react-redux';
+import {updateTasksState} from '../redux/features/tasks/tasksSlice';
 
 export default function PersonalTasksScreen() {
+  const tasksChanged = useSelector(
+    (state: RootState) => state.tasks.taskChangesWatcher,
+  );
+  const dispatch = useDispatch();
   const [personalTasks, setPersonalTasks] = useState<Task[]>([]);
-  const [tasksChanged, setTasksChanged] = useState<boolean>(false);
   const [showOnlyNotCompleted, setShowOnlyNotCompleted] =
     useState<boolean>(false);
-
-  // useEffect(() => {
-  //   getTasks([{property: 'category', value: 'personal'}]).then(
-  //     (taskList: Task[]) => {
-  //       setPersonalTasks(taskList);
-  //     },
-  //   );
-  // }, [tasksChanged]);
 
   useEffect(() => {
     getTasks([
@@ -27,9 +25,9 @@ export default function PersonalTasksScreen() {
       {property: 'completed', value: showOnlyNotCompleted},
     ]).then((taskList: Task[]) => {
       setPersonalTasks(taskList);
-      setTasksChanged(false);
+      dispatch(updateTasksState(false));
     });
-  }, [showOnlyNotCompleted, tasksChanged]);
+  }, [dispatch, showOnlyNotCompleted, tasksChanged]);
 
   return (
     <SafeAreaView>
@@ -43,11 +41,7 @@ export default function PersonalTasksScreen() {
           style={styles.completedToggle}>
           {t('tasksOnlyCompleted')}
         </Toggle>
-        <TaskListComponent
-          type="personal"
-          tasks={personalTasks}
-          tasksSubscriber={setTasksChanged}
-        />
+        <TaskListComponent type="personal" tasks={personalTasks} />
       </Layout>
     </SafeAreaView>
   );

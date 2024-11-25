@@ -5,7 +5,7 @@ function filterTaskList(
   tasksFromDB: Task[],
   options: {
     property: 'completed' | 'category';
-    value: 'true' | 'false' | 'personal' | 'green';
+    value: true | false | 'personal' | 'green';
   }[],
 ): Task[] {
   const filteredTasks: Task[] = [];
@@ -66,6 +66,29 @@ export async function createTask(newTask: Task): Promise<boolean> {
       storage.set('userTasks', JSON.stringify(tasksFromDB));
     } else {
       storage.set('userTasks', JSON.stringify([newTask]));
+    }
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+}
+
+export async function editTask(taskId: string, taskChanges: Partial<Task>) {
+  try {
+    if (storage.contains('userTasks')) {
+      const tasksFromDB: Task[] = await JSON.parse(
+        storage.getString('userTasks')!,
+      );
+
+      const updatedTasks = tasksFromDB.map(item =>
+        item.id === taskId ? {...item, ...taskChanges} : item,
+      );
+
+      storage.set('userTasks', JSON.stringify(updatedTasks));
+    } else {
+      return false;
     }
 
     return true;
