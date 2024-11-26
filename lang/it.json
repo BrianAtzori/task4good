@@ -10,6 +10,7 @@
     "availableSettingThemeDescription": "Scegli tra chiaro e scuro",
     "selectOptionLabel": "Scegli un'opzione",
     "tasksOnlyCompleted": "Mostra solo completate",
-    "tasksAll": "Mostra tutte le attività"
+    "tasksAll": "Mostra tutte le attività",
+    "createNewTaskTitle":"Crea nuova attività"
   }
 }
