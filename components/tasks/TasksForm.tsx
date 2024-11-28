@@ -1,6 +1,15 @@
-import React, {BaseSyntheticEvent} from 'react';
+import React, {BaseSyntheticEvent, useState} from 'react';
 import {Controller, FieldValues, useForm} from 'react-hook-form';
-import {Button, Input, Layout, Radio, RadioGroup} from '@ui-kitten/components';
+import {
+  Button,
+  Card,
+  Divider,
+  Input,
+  Layout,
+  Radio,
+  RadioGroup,
+  Text,
+} from '@ui-kitten/components';
 import {t} from 'i18next';
 import {StyleSheet} from 'react-native';
 import {useDispatch} from 'react-redux';
@@ -8,31 +17,86 @@ import {createTask} from '../../utils/functions/tasks';
 import uuid from 'react-native-uuid';
 import {updateTasksState} from '../../redux/features/tasks/tasksSlice';
 import {Task} from '../../utils/interfaces/interfaces';
+import {toggleDrawer} from '../../redux/features/drawer/drawerSlice';
 
 export default function TasksForm() {
-  const {control, handleSubmit} = useForm();
-
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: {errors},
+  } = useForm();
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
   const dispatch = useDispatch();
 
-  function onSubmit(
+  async function onSubmit(
     data: FieldValues,
     event?: BaseSyntheticEvent<object, any, any> | undefined,
   ) {
     event?.preventDefault();
 
-    createTask({
+    const result = await createTask({
+      ...(data as Task),
+      category: data.category === 0 ? 'personal' : 'green',
       id: uuid.v4(),
       completed: false,
-      ...(data as Partial<Task>),
     });
 
-    dispatch(updateTasksState(true));
+    if (result) {
+      dispatch(updateTasksState(true));
+      setShowSuccess(true);
+    } else {
+      setShowError(true);
+    }
   }
 
-  //TODO: Validation handling
+  if (showError) {
+    return (
+      <Card status="danger" disabled>
+        <Layout style={styles.cardLayout}>
+          <Text style={styles.message} status="danger">
+            {t('errorMessage')}
+          </Text>
+          <Button
+            onPress={() => {
+              setShowError(false);
+              reset();
+            }}>
+            {t('retryLabel')}
+          </Button>
+        </Layout>
+      </Card>
+    );
+  }
+
+  if (showSuccess) {
+    return (
+      <Card status="success" disabled>
+        <Layout style={styles.cardLayout}>
+          <Text style={styles.message} status="success">
+            {t('successMessage')}
+          </Text>
+          <Button
+            onPress={() => {
+              setShowSuccess(false);
+              reset();
+            }}>
+            {t('createAgain')}
+          </Button>
+          <Button
+            onPress={() => {
+              dispatch(toggleDrawer());
+            }}>
+            {t('closeLabel')}
+          </Button>
+        </Layout>
+      </Card>
+    );
+  }
 
   return (
-    <Layout level="2" style={styles.formContainer}>
+    <Layout style={styles.formContainer}>
       <Controller
         control={control}
         render={({field: {onChange, onBlur, value}}) => (
@@ -41,25 +105,30 @@ export default function TasksForm() {
             onChangeText={onChange}
             value={value}
             placeholder={t('taskNamePlaceholder')}
+            status={errors.name ? 'danger' : 'basic'}
           />
         )}
         name="name"
-        rules={{required: true}}
+        rules={{required: t('fieldErrorMessage')}}
         defaultValue="" //TODO: In editing is the task value
       />
+      {errors.name && <Text status="danger">{errors.name.message as any}</Text>}
       <Controller
         control={control}
         render={({field: {onChange, value}}) => (
           <RadioGroup selectedIndex={value} onChange={onChange}>
-            <Radio>Option 1</Radio>
-            <Radio>Option 2</Radio>
-            <Radio>Option 3</Radio>
+            <Radio>{t('personalCategoryLabel')}</Radio>
+            <Radio>{t('greenCategoryLabel')}</Radio>
           </RadioGroup>
         )}
         name="category"
-        rules={{required: true}}
+        rules={{required: t('fieldErrorMessage')}}
         defaultValue="" //TODO: In editing is the task value
       />
+      {errors.category && (
+        <Text status="danger">{errors.category.message as any}</Text>
+      )}
+      <Divider />
       <Button onPress={handleSubmit(onSubmit)}>{t('saveTaskLabel')}</Button>
     </Layout>
   );
@@ -67,4 +136,13 @@ export default function TasksForm() {
 
 const styles = StyleSheet.create({
   formContainer: {padding: 8, gap: 16, borderRadius: 16},
+  cardLayout: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 16,
+  },
+  message: {
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
 });

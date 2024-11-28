@@ -11,6 +11,16 @@
     "selectOptionLabel": "Scegli un'opzione",
     "tasksOnlyCompleted": "Mostra solo completate",
     "tasksAll": "Mostra tutte le attività",
-    "createNewTaskTitle":"Crea nuova attività"
+    "createNewTaskTitle": "Crea nuova attività",
+    "saveTaskLabel": "Crea",
+    "taskNamePlaceholder": "Il nome della nuova attività",
+    "personalCategoryLabel": "Personali",
+    "greenCategoryLabel": "Ambientali",
+    "retryLabel": "Riprova",
+    "successMessage": "Nuova attività creata con successo!",
+    "errorMessage": "Qualcosa è andato storto, riprova o contatta il supporto.",
+    "createAgain": "Crea di nuovo",
+    "closeLabel": "Chiudi",
+    "fieldErrorMessage": "Questo campo è richiesto!"
   }
 }

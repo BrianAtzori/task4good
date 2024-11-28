@@ -16,18 +16,6 @@ export default function TaskManagerModalComponent({
 }) {
   const dispatch = useDispatch();
 
-  // function tempOnClick() {
-  //   createTask({
-  //     id: uuid.v4(),
-  //     name: 'Cane',
-  //     completed: false,
-  //     category: 'personal',
-  //   });
-  //   dispatch(updateTasksState(true));
-  // }
-
-  //TODO: Translations
-
   return (
     <Modal
       animationType="fade"
