@@ -11,10 +11,10 @@ import {useDispatch, useSelector} from 'react-redux';
 import {updateTasksState} from '../redux/features/tasks/tasksSlice';
 
 export default function PersonalTasksScreen() {
+  const dispatch = useDispatch();
   const tasksChanged = useSelector(
     (state: RootState) => state.tasks.taskChangesWatcher,
   );
-  const dispatch = useDispatch();
   const [personalTasks, setPersonalTasks] = useState<Task[]>([]);
   const [showOnlyNotCompleted, setShowOnlyNotCompleted] =
     useState<boolean>(false);

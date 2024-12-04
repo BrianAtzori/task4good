@@ -57,7 +57,9 @@ function App(): React.JSX.Element {
     <SettingsIcon fill={color} />
   );
 
-  const isDrawerOpen = useSelector((state: RootState) => state.drawer.isOpen);
+  const {isOpen: isDrawerOpen, mode} = useSelector(
+    (state: RootState) => state.drawer,
+  );
 
   return (
     <>
@@ -109,7 +111,10 @@ function App(): React.JSX.Element {
               </Tab.Navigator>
             </NavigationContainer>
             <AddTaskButton />
-            <TaskManagerModalComponent isOpen={isDrawerOpen} />
+            <TaskManagerModalComponent
+              isOpen={isDrawerOpen}
+              title={mode !== 'edit' ? 'createNewTaskTitle' : 'editTaskTitle'}
+            />
           </SafeAreaProvider>
         </ApplicationProvider>
       </ThemeContext.Provider>

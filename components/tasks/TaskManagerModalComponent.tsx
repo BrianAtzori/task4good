@@ -1,20 +1,46 @@
 import {Button, Card, Layout, Modal, Text} from '@ui-kitten/components';
 import {SafeAreaView, StyleSheet} from 'react-native';
-import React from 'react';
-import {useDispatch} from 'react-redux';
+import React, {useEffect, useState} from 'react';
+import {useDispatch, useSelector} from 'react-redux';
 import {toggleDrawer} from '../../redux/features/drawer/drawerSlice';
 import {t} from 'i18next';
 import CloseIcon from '../../style/icons/CloseIcon';
 import TasksForm from './TasksForm';
+import {RootState} from '../../redux/store';
+import {Task} from '../../utils/interfaces/interfaces';
+import {getTasks} from '../../utils/functions/tasks';
 
 export default function TaskManagerModalComponent({
   isOpen,
-  title = 'createNewTaskTitle',
+  title,
 }: {
   isOpen: boolean;
   title: string;
 }) {
   const dispatch = useDispatch();
+  const {mode, objectId: taskId} = useSelector(
+    (state: RootState) => state.drawer,
+  );
+  const tasksChanged = useSelector(
+    (state: RootState) => state.tasks.taskChangesWatcher,
+  );
+  const [targetTask, setTargetTask] = useState<Task | undefined>();
+
+  useEffect(() => {
+    async function findSingleTask() {
+      await getTasks()
+        .then((tasks: Task[]) => {
+          return tasks.filter(singleTask => singleTask.id === taskId).at(0);
+        })
+        .then(task => {
+          setTargetTask(task);
+        });
+    }
+
+    if (mode === 'edit') {
+      findSingleTask();
+    }
+  }, [mode, taskId, tasksChanged]);
 
   return (
     <Modal
@@ -33,7 +59,7 @@ export default function TaskManagerModalComponent({
               accessoryLeft={<CloseIcon />}
             />
           </Layout>
-          <TasksForm />
+          <TasksForm targetTask={targetTask} />
         </Card>
       </SafeAreaView>
     </Modal>

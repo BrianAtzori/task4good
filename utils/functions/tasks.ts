@@ -10,18 +10,9 @@ function filterTaskList(
 ): Task[] {
   const filteredTasks: Task[] = [];
 
-  console.log('completed: ', tasksFromDB);
-
   for (let i = 0; i < tasksFromDB.length; i++) {
-    let shouldIAdd = false;
-
-    options.map(option => {
-      if (tasksFromDB[i][option.property] === option.value) {
-        shouldIAdd = true;
-      } else {
-        shouldIAdd = false;
-        return;
-      }
+    const shouldIAdd = options.every(option => {
+      return tasksFromDB[i][option.property] === option.value;
     });
 
     if (shouldIAdd) {
@@ -29,13 +20,11 @@ function filterTaskList(
     }
   }
 
-  console.log('filtered: ', filteredTasks);
-
   return filteredTasks;
 }
 
 export async function getTasks(
-  options: {
+  options?: {
     property: 'completed' | 'category';
     value: true | false | 'personal' | 'green';
   }[],

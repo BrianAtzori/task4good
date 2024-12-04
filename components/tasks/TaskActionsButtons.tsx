@@ -7,6 +7,7 @@ import DoneIcon from '../../style/icons/DoneIcon';
 import {deleteTask, editTask} from '../../utils/functions/tasks';
 import {useDispatch} from 'react-redux';
 import {updateTasksState} from '../../redux/features/tasks/tasksSlice';
+import {openEdit} from '../../redux/features/drawer/drawerSlice';
 
 export default function TaskActionsButtons({
   isCompleted,
@@ -29,7 +30,13 @@ export default function TaskActionsButtons({
               dispatch(updateTasksState(true));
             }}
           />
-          <Button style={styles.iconButton} accessoryLeft={<EditIcon />} />
+          <Button
+            style={styles.iconButton}
+            onPress={() => {
+              dispatch(openEdit({objectId: taskId}));
+            }}
+            accessoryLeft={<EditIcon />}
+          />
         </>
       )}
 

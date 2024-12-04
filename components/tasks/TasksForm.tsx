@@ -1,4 +1,4 @@
-import React, {BaseSyntheticEvent, useState} from 'react';
+import React, {BaseSyntheticEvent, useEffect, useState} from 'react';
 import {Controller, FieldValues, useForm} from 'react-hook-form';
 import {
   Button,
@@ -12,36 +12,67 @@ import {
 } from '@ui-kitten/components';
 import {t} from 'i18next';
 import {StyleSheet} from 'react-native';
-import {useDispatch} from 'react-redux';
-import {createTask} from '../../utils/functions/tasks';
+import {useDispatch, useSelector} from 'react-redux';
+import {createTask, editTask} from '../../utils/functions/tasks';
 import uuid from 'react-native-uuid';
 import {updateTasksState} from '../../redux/features/tasks/tasksSlice';
 import {Task} from '../../utils/interfaces/interfaces';
-import {toggleDrawer} from '../../redux/features/drawer/drawerSlice';
+import {
+  switchMode,
+  toggleDrawer,
+} from '../../redux/features/drawer/drawerSlice';
+import {RootState} from '../../redux/store';
 
-export default function TasksForm() {
+export default function TasksForm({targetTask}: {targetTask?: Task}) {
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [showError, setShowError] = useState(false);
+  const mode = useSelector((state: RootState) => state.drawer.mode);
+  const dispatch = useDispatch();
+
   const {
     control,
     handleSubmit,
-    reset,
     formState: {errors},
-  } = useForm();
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [showError, setShowError] = useState(false);
-  const dispatch = useDispatch();
+    reset,
+  } = useForm({
+    defaultValues: {
+      name: mode !== 'edit' ? '' : targetTask?.name || '',
+      category:
+        mode !== 'edit' ? '' : targetTask?.category === 'personal' ? 0 : 1,
+    },
+  });
+
+  useEffect(() => {
+    if (targetTask) {
+      reset({
+        name: mode !== 'edit' ? '' : targetTask.name,
+        category:
+          mode !== 'edit' ? '' : targetTask.category === 'personal' ? 0 : 1,
+      });
+    }
+  }, [targetTask, mode, reset]);
 
   async function onSubmit(
     data: FieldValues,
     event?: BaseSyntheticEvent<object, any, any> | undefined,
   ) {
     event?.preventDefault();
+    let result: boolean;
 
-    const result = await createTask({
-      ...(data as Task),
-      category: data.category === 0 ? 'personal' : 'green',
-      id: uuid.v4(),
-      completed: false,
-    });
+    if (mode !== 'edit') {
+      result = await createTask({
+        ...(data as Task),
+        category: data.category === 0 ? 'personal' : 'green',
+        id: uuid.v4(),
+        completed: false,
+      });
+    } else {
+      result = await editTask(targetTask?.id!, {
+        ...(data as Task),
+        category: data.category === 0 ? 'personal' : 'green',
+        completed: false,
+      });
+    }
 
     if (result) {
       dispatch(updateTasksState(true));
@@ -80,6 +111,7 @@ export default function TasksForm() {
           <Button
             onPress={() => {
               setShowSuccess(false);
+              dispatch(switchMode('create'));
               reset();
             }}>
             {t('createAgain')}
@@ -99,6 +131,8 @@ export default function TasksForm() {
     <Layout style={styles.formContainer}>
       <Controller
         control={control}
+        name="name"
+        rules={{required: t('fieldErrorMessage')}}
         render={({field: {onChange, onBlur, value}}) => (
           <Input
             onBlur={onBlur}
@@ -108,26 +142,26 @@ export default function TasksForm() {
             status={errors.name ? 'danger' : 'basic'}
           />
         )}
-        name="name"
-        rules={{required: t('fieldErrorMessage')}}
-        defaultValue="" //TODO: In editing is the task value
       />
-      {errors.name && <Text status="danger">{errors.name.message as any}</Text>}
+      {errors.name && <Text status="danger">{errors.name.message}</Text>}
+
       <Controller
         control={control}
+        name="category"
+        rules={{required: t('fieldErrorMessage')}}
         render={({field: {onChange, value}}) => (
-          <RadioGroup selectedIndex={value} onChange={onChange}>
+          <RadioGroup
+            selectedIndex={value as any}
+            onChange={index => onChange(index)}>
             <Radio>{t('personalCategoryLabel')}</Radio>
             <Radio>{t('greenCategoryLabel')}</Radio>
           </RadioGroup>
         )}
-        name="category"
-        rules={{required: t('fieldErrorMessage')}}
-        defaultValue="" //TODO: In editing is the task value
       />
       {errors.category && (
-        <Text status="danger">{errors.category.message as any}</Text>
+        <Text status="danger">{errors.category.message}</Text>
       )}
+
       <Divider />
       <Button onPress={handleSubmit(onSubmit)}>{t('saveTaskLabel')}</Button>
     </Layout>
