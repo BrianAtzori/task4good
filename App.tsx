@@ -21,6 +21,10 @@ import HomeIcon from './style/icons/HomeIcon';
 import GreenTaskIcon from './style/icons/GreenTasksIcon';
 import PersonalTaskIcon from './style/icons/PersonalTaskIcon';
 import {t} from 'i18next';
+import AddTaskButton from './components/tasks/AddTaskButton';
+import {useSelector} from 'react-redux';
+import type {RootState} from './redux/store';
+import TaskManagerModalComponent from './components/tasks/TaskManagerModalComponent';
 
 const Tab = createBottomTabNavigator();
 
@@ -51,6 +55,10 @@ function App(): React.JSX.Element {
 
   const renderSettingsIcon = ({color}: {color: string}) => (
     <SettingsIcon fill={color} />
+  );
+
+  const {isOpen: isDrawerOpen, mode} = useSelector(
+    (state: RootState) => state.drawer,
   );
 
   return (
@@ -102,6 +110,11 @@ function App(): React.JSX.Element {
                 />
               </Tab.Navigator>
             </NavigationContainer>
+            <AddTaskButton />
+            <TaskManagerModalComponent
+              isOpen={isDrawerOpen}
+              title={mode !== 'edit' ? 'createNewTaskTitle' : 'editTaskTitle'}
+            />
           </SafeAreaProvider>
         </ApplicationProvider>
       </ThemeContext.Provider>
