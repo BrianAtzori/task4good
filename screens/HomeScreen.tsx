@@ -5,20 +5,6 @@ import React, {useState} from 'react';
 function HomeScreen() {
   const [counter, setCounter] = useState(0);
 
-  // const [sampleState, setSampleState] = useState({
-  //   username: '',
-  //   age: 0,
-  //   isMmkvFastAsf: false,
-  // });
-
-  // function readDataSetState() {
-  //   const username = storage.getString('user.name');
-  //   const age = storage.getNumber('user.age');
-  //   const isMmkvFastAsf = storage.getBoolean('is-mmkv-fast-asf');
-
-  //   setSampleState({username, age, isMmkvFastAsf});
-  // }
-
   return (
     <>
       <SafeAreaView>

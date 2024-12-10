@@ -3,12 +3,7 @@ import {Divider, Layout, List, ListItem} from '@ui-kitten/components';
 import {Task} from '../../utils/interfaces/interfaces';
 import TaskActionsButtons from './TaskActionsButtons';
 
-export default function TaskListComponent({
-  tasks,
-}: {
-  tasks: Task[];
-  type: 'personal' | 'green' | 'home';
-}) {
+export default function TaskListComponent({tasks}: {tasks: Task[]}) {
   const renderTask = ({item}: {item: Task}): React.ReactElement => {
     return (
       <ListItem
@@ -30,7 +25,8 @@ export default function TaskListComponent({
         ListHeaderComponent={Divider}
         ItemSeparatorComponent={Divider}
         ListFooterComponent={Divider}
-        alwaysBounceVertical={false}
+        keyExtractor={task => task.id}
+        bounces={false}
       />
     </Layout>
   );
