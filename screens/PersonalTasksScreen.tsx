@@ -31,7 +31,7 @@ export default function PersonalTasksScreen() {
 
   return (
     <SafeAreaView>
-      <Layout>
+      <Layout style={styles.container}>
         <PageTitleComponent title="personalTasksTitle" />
         <Toggle
           onChange={() => {
@@ -41,12 +41,16 @@ export default function PersonalTasksScreen() {
           style={styles.completedToggle}>
           {t('tasksOnlyCompleted')}
         </Toggle>
-        <TaskListComponent type="personal" tasks={personalTasks} />
+        <TaskListComponent tasks={personalTasks} />
       </Layout>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    paddingBottom: 48,
+    height: '90%',
+  },
   completedToggle: {alignSelf: 'flex-end', margin: 8},
 });
