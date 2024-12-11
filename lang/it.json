@@ -23,6 +23,8 @@
     "errorMessage": "Qualcosa è andato storto, riprova o contatta il supporto.",
     "createAgain": "Crea nuova",
     "closeLabel": "Chiudi",
-    "fieldErrorMessage": "Questo campo è richiesto!"
+    "fieldErrorMessage": "Questo campo è richiesto!",
+    "homepageTitle": "Attività in evidenza",
+    "emptyTasksListMessage": "Nessuna attività trovata"
   }
 }
