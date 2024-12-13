@@ -1,24 +1,30 @@
 import {Divider, Layout, List, ListItem} from '@ui-kitten/components';
 import {t} from 'i18next';
-import React from 'react';
+import React, {useMemo} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import {LanguageSwitcher} from '../components/settings/LanguageSwitcher';
 import ThemeSwitcher from '../components/settings/ThemeSwitcher';
 import PageTitleComponent from '../components/shared/PageTitleComponent';
 
 export default function SettingsScreen() {
-  const availableSettings = [
-    {
-      label: t('availableSettingLanguageLabel'),
-      description: t('availableSettingLanguageDescription'),
-      component: <LanguageSwitcher />,
-    },
-    {
-      label: t('availableSettingThemeLabel'),
-      description: t('availableSettingThemeDescription'),
-      component: <ThemeSwitcher />,
-    },
-  ];
+  const languageSwitcher = useMemo(() => <LanguageSwitcher />, []);
+  const themeSwitcher = useMemo(() => <ThemeSwitcher />, []);
+
+  const availableSettings = useMemo(
+    () => [
+      {
+        label: t('availableSettingLanguageLabel'),
+        description: t('availableSettingLanguageDescription'),
+        component: languageSwitcher,
+      },
+      {
+        label: t('availableSettingThemeLabel'),
+        description: t('availableSettingThemeDescription'),
+        component: themeSwitcher,
+      },
+    ],
+    [languageSwitcher, themeSwitcher],
+  );
 
   const renderSetting = ({
     item,

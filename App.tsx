@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import * as eva from '@eva-design/eva';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import {ApplicationProvider, IconRegistry} from '@ui-kitten/components';
@@ -25,21 +25,29 @@ import AddTaskButton from './components/tasks/AddTaskButton';
 import {useSelector} from 'react-redux';
 import type {RootState} from './redux/store';
 import TaskManagerModalComponent from './components/tasks/TaskManagerModalComponent';
+import {storage} from './db/mmkv';
+import i18n from './lang/i18n';
+import {I18nextProvider} from 'react-i18next';
 
 const Tab = createBottomTabNavigator();
 
 function App(): React.JSX.Element {
   const [theme, setTheme] = React.useState('light');
 
-  const toggleTheme = () => {
-    const nextTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(nextTheme);
-  };
+  const toggleTheme = React.useCallback(() => {
+    setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
+  }, []);
 
   const currentTheme = theme === 'light' ? lightTheme : darkTheme;
 
   const currentNavigationTheme =
     theme === 'dark' ? darkNavigationTheme : lightNavigationTheme;
+
+  useEffect(() => {
+    const savedLanguage = storage.getString('selectedLanguage') || 'it';
+
+    i18n.changeLanguage(savedLanguage);
+  }, []);
 
   const renderHomeIcon = ({color}: {color: string}) => (
     <HomeIcon fill={color} />
@@ -64,60 +72,62 @@ function App(): React.JSX.Element {
   return (
     <>
       <IconRegistry icons={EvaIconsPack} />
-      <ThemeContext.Provider value={{theme, toggleTheme}}>
-        <ApplicationProvider {...eva} theme={currentTheme}>
-          <SafeAreaProvider>
-            <NavigationContainer theme={currentNavigationTheme}>
-              <Tab.Navigator
-                screenOptions={() => ({
-                  headerShown: false,
-                  tabBarActiveTintColor: currentTheme['color-primary-500'],
-                  tabBarInactiveTintColor: currentTheme['color-basic-400'],
-                  tabBarStyle: {
-                    backgroundColor: currentTheme['color-basic-100'],
-                  },
-                })}>
-                <Tab.Screen
-                  name="Home"
-                  component={HomeScreen}
-                  options={{
-                    tabBarIcon: renderHomeIcon,
-                  }}
-                />
-                <Tab.Screen
-                  name="PersonalTasks"
-                  component={PersonalTasksScreen}
-                  options={{
-                    tabBarIcon: renderPersonalTasksIcon,
-                    tabBarLabel: t('personalTasksLabel'),
-                  }}
-                />
-                <Tab.Screen
-                  name="GreenTasks"
-                  component={GreenTasksScreen}
-                  options={{
-                    tabBarIcon: renderGreenTasksIcon,
-                    tabBarLabel: t('greenTasksLabel'),
-                  }}
-                />
-                <Tab.Screen
-                  name="Settings"
-                  component={SettingsScreen}
-                  options={{
-                    tabBarIcon: renderSettingsIcon,
-                    tabBarLabel: t('settingsLabel'),
-                  }}
-                />
-              </Tab.Navigator>
-            </NavigationContainer>
-            <AddTaskButton />
-            <TaskManagerModalComponent
-              isOpen={isDrawerOpen}
-              title={mode !== 'edit' ? 'createNewTaskTitle' : 'editTaskTitle'}
-            />
-          </SafeAreaProvider>
-        </ApplicationProvider>
-      </ThemeContext.Provider>
+      <I18nextProvider i18n={i18n}>
+        <ThemeContext.Provider value={{theme, toggleTheme}}>
+          <ApplicationProvider {...eva} theme={currentTheme}>
+            <SafeAreaProvider>
+              <NavigationContainer theme={currentNavigationTheme}>
+                <Tab.Navigator
+                  screenOptions={() => ({
+                    headerShown: false,
+                    tabBarActiveTintColor: currentTheme['color-primary-500'],
+                    tabBarInactiveTintColor: currentTheme['color-basic-400'],
+                    tabBarStyle: {
+                      backgroundColor: currentTheme['color-basic-100'],
+                    },
+                  })}>
+                  <Tab.Screen
+                    name="Home"
+                    component={HomeScreen}
+                    options={{
+                      tabBarIcon: renderHomeIcon,
+                    }}
+                  />
+                  <Tab.Screen
+                    name="PersonalTasks"
+                    component={PersonalTasksScreen}
+                    options={{
+                      tabBarIcon: renderPersonalTasksIcon,
+                      tabBarLabel: t('personalTasksLabel'),
+                    }}
+                  />
+                  <Tab.Screen
+                    name="GreenTasks"
+                    component={GreenTasksScreen}
+                    options={{
+                      tabBarIcon: renderGreenTasksIcon,
+                      tabBarLabel: t('greenTasksLabel'),
+                    }}
+                  />
+                  <Tab.Screen
+                    name="Settings"
+                    component={SettingsScreen}
+                    options={{
+                      tabBarIcon: renderSettingsIcon,
+                      tabBarLabel: t('settingsLabel'),
+                    }}
+                  />
+                </Tab.Navigator>
+              </NavigationContainer>
+              <AddTaskButton />
+              <TaskManagerModalComponent
+                isOpen={isDrawerOpen}
+                title={mode !== 'edit' ? 'createNewTaskTitle' : 'editTaskTitle'}
+              />
+            </SafeAreaProvider>
+          </ApplicationProvider>
+        </ThemeContext.Provider>
+      </I18nextProvider>
     </>
   );
 }
