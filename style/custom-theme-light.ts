@@ -13,13 +13,18 @@ export const lightTheme = {
   'color-basic-200': '#e5e4e6',
   'color-basic-300': '#d4d3d5',
   'color-basic-400': '#c2c1c3',
+
+  'color-basic-700': '#fab946',
+  'color-basic-800': '#fab946',
   'color-basic-900': '#191a1a',
 
   'text-basic-color': '#191a1a',
   'text-control-color': '#191a1a',
 
-  'color-primary-focus': '#ffb300',
+  'color-primary-transparent-300': '#ffd14d',
+
+  'color-primary-focus': '#ffd14d',
   'color-primary-hover': '#ffcd33',
-  'color-primary-active': '#ffecb3',
+  'color-primary-active': '#ffd14d',
   'color-primary-disabled': '#ffe082',
 };

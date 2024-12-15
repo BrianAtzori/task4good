@@ -11,10 +11,14 @@ export const darkTheme = {
 
   'color-basic-100': '#191a1a',
   'color-basic-200': '#2d2f2f',
-  'color-basic-300': '#424546',
   'color-basic-400': '#565a5a',
+
+  'color-basic-700': '#fab946',
   'color-basic-800': '#191a1a',
-  'color-basic-900': '#f7f6f7',
+  'color-basic-900': '#191a1a',
+  'color-basic-1000': '#565a5a',
+
+  'border-basic-color-4': '#565a5a',
 
   'text-basic-color': '#f7f6f7',
 

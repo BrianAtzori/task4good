@@ -2,7 +2,10 @@ import {Button, Card, Layout, Modal, Text} from '@ui-kitten/components';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {toggleDrawer} from '../../redux/features/drawer/drawerSlice';
+import {
+  switchMode,
+  toggleDrawer,
+} from '../../redux/features/drawer/drawerSlice';
 import {t} from 'i18next';
 import CloseIcon from '../../style/icons/CloseIcon';
 import TasksForm from './TasksForm';
@@ -54,7 +57,10 @@ export default function TaskManagerModalComponent({
             <Text category="h4">{t(title)}</Text>
             <Button
               style={styles.closeButton}
-              onPress={() => dispatch(toggleDrawer())}
+              onPress={() => {
+                dispatch(switchMode('create'));
+                dispatch(toggleDrawer());
+              }}
               appearance="ghost"
               accessoryLeft={<CloseIcon />}
             />
@@ -80,6 +86,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     marginLeft: 'auto',
+    backgroundColor: '#fab946',
   },
   cardHeader: {
     flexDirection: 'row',

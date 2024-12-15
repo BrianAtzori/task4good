@@ -72,4 +72,6 @@ export const LanguageSwitcher = (): React.ReactElement => {
   );
 };
 
-const styles = StyleSheet.create({languageSelect: {minWidth: 200}});
+const styles = StyleSheet.create({
+  languageSelect: {minWidth: 200},
+});

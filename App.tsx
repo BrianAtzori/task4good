@@ -20,19 +20,20 @@ import SettingsIcon from './style/icons/SettingsIcon';
 import HomeIcon from './style/icons/HomeIcon';
 import GreenTaskIcon from './style/icons/GreenTasksIcon';
 import PersonalTaskIcon from './style/icons/PersonalTaskIcon';
-import {t} from 'i18next';
 import AddTaskButton from './components/tasks/AddTaskButton';
 import {useSelector} from 'react-redux';
 import type {RootState} from './redux/store';
 import TaskManagerModalComponent from './components/tasks/TaskManagerModalComponent';
 import {storage} from './db/mmkv';
 import i18n from './lang/i18n';
-import {I18nextProvider} from 'react-i18next';
+import {I18nextProvider, useTranslation} from 'react-i18next';
 
 const Tab = createBottomTabNavigator();
 
 function App(): React.JSX.Element {
   const [theme, setTheme] = React.useState('light');
+
+  const {t} = useTranslation();
 
   const toggleTheme = React.useCallback(() => {
     setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));

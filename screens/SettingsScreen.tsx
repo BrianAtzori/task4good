@@ -1,12 +1,14 @@
 import {Divider, Layout, List, ListItem} from '@ui-kitten/components';
-import {t} from 'i18next';
 import React, {useMemo} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 import {LanguageSwitcher} from '../components/settings/LanguageSwitcher';
 import ThemeSwitcher from '../components/settings/ThemeSwitcher';
 import PageTitleComponent from '../components/shared/PageTitleComponent';
+import {useTranslation} from 'react-i18next';
 
 export default function SettingsScreen() {
+  const {t} = useTranslation();
+
   const languageSwitcher = useMemo(() => <LanguageSwitcher />, []);
   const themeSwitcher = useMemo(() => <ThemeSwitcher />, []);
 
@@ -23,7 +25,7 @@ export default function SettingsScreen() {
         component: themeSwitcher,
       },
     ],
-    [languageSwitcher, themeSwitcher],
+    [languageSwitcher, t, themeSwitcher],
   );
 
   const renderSetting = ({
