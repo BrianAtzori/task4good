@@ -31,13 +31,20 @@ import {I18nextProvider, useTranslation} from 'react-i18next';
 const Tab = createBottomTabNavigator();
 
 function App(): React.JSX.Element {
-  const [theme, setTheme] = React.useState('light');
+  const [theme, setTheme] = React.useState(
+    storage.getString('appTheme') || 'light',
+  );
 
   const {t} = useTranslation();
 
   const toggleTheme = React.useCallback(() => {
-    setTheme(prevTheme => (prevTheme === 'light' ? 'dark' : 'light'));
-  }, []);
+    setTheme(prevTheme => {
+      const nextTheme = prevTheme === 'light' ? 'dark' : 'light';
+      storage.set('appTheme', nextTheme);
+      return nextTheme;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [theme]);
 
   const currentTheme = theme === 'light' ? lightTheme : darkTheme;
 
@@ -80,6 +87,7 @@ function App(): React.JSX.Element {
               <NavigationContainer theme={currentNavigationTheme}>
                 <Tab.Navigator
                   screenOptions={() => ({
+                    lazy: false,
                     headerShown: false,
                     tabBarActiveTintColor: currentTheme['color-primary-500'],
                     tabBarInactiveTintColor: currentTheme['color-basic-400'],
@@ -92,6 +100,8 @@ function App(): React.JSX.Element {
                     component={HomeScreen}
                     options={{
                       tabBarIcon: renderHomeIcon,
+                      lazy: false,
+                      animation: 'fade',
                     }}
                   />
                   <Tab.Screen
@@ -100,6 +110,8 @@ function App(): React.JSX.Element {
                     options={{
                       tabBarIcon: renderPersonalTasksIcon,
                       tabBarLabel: t('personalTasksLabel'),
+                      lazy: false,
+                      animation: 'fade',
                     }}
                   />
                   <Tab.Screen
@@ -108,6 +120,8 @@ function App(): React.JSX.Element {
                     options={{
                       tabBarIcon: renderGreenTasksIcon,
                       tabBarLabel: t('greenTasksLabel'),
+                      lazy: false,
+                      animation: 'fade',
                     }}
                   />
                   <Tab.Screen
@@ -116,6 +130,8 @@ function App(): React.JSX.Element {
                     options={{
                       tabBarIcon: renderSettingsIcon,
                       tabBarLabel: t('settingsLabel'),
+                      lazy: false,
+                      animation: 'fade',
                     }}
                   />
                 </Tab.Navigator>

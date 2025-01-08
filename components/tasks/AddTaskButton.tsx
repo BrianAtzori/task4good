@@ -20,8 +20,8 @@ export default function AddTaskButton() {
 const styles = StyleSheet.create({
   iconButton: {
     position: 'absolute',
-    bottom: '10%',
-    right: 16,
+    bottom: '12%',
+    right: 15,
     borderColor: '1px solid',
   },
 });
