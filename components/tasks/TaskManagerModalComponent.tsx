@@ -1,8 +1,11 @@
 import {Button, Card, Layout, Modal, Text} from '@ui-kitten/components';
-import {SafeAreaView, StyleSheet} from 'react-native';
+import {KeyboardAvoidingView, SafeAreaView, StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
-import {toggleDrawer} from '../../redux/features/drawer/drawerSlice';
+import {
+  switchMode,
+  toggleDrawer,
+} from '../../redux/features/drawer/drawerSlice';
 import {t} from 'i18next';
 import CloseIcon from '../../style/icons/CloseIcon';
 import TasksForm from './TasksForm';
@@ -49,18 +52,23 @@ export default function TaskManagerModalComponent({
       backdropStyle={styles.backdrop}
       style={styles.modal}>
       <SafeAreaView style={styles.safeArea}>
-        <Card disabled={true}>
-          <Layout style={styles.cardHeader}>
-            <Text category="h4">{t(title)}</Text>
-            <Button
-              style={styles.closeButton}
-              onPress={() => dispatch(toggleDrawer())}
-              appearance="ghost"
-              accessoryLeft={<CloseIcon />}
-            />
-          </Layout>
-          <TasksForm targetTask={targetTask} />
-        </Card>
+        <KeyboardAvoidingView behavior="padding">
+          <Card disabled={true}>
+            <Layout style={styles.cardHeader}>
+              <Text category="h4">{t(title)}</Text>
+              <Button
+                style={styles.closeButton}
+                onPress={() => {
+                  dispatch(switchMode('create'));
+                  dispatch(toggleDrawer());
+                }}
+                appearance="ghost"
+                accessoryLeft={<CloseIcon />}
+              />
+            </Layout>
+            <TasksForm targetTask={targetTask} />
+          </Card>
+        </KeyboardAvoidingView>
       </SafeAreaView>
     </Modal>
   );
@@ -80,6 +88,7 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     marginLeft: 'auto',
+    backgroundColor: '#fab946',
   },
   cardHeader: {
     flexDirection: 'row',

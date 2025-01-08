@@ -1,5 +1,28 @@
 {
-    "translation": {
-      "lang": "fran"
-    }
-  }
+  "personalTasksLabel": "Personnel",
+  "greenTasksLabel": "Environnement",
+  "settingsLabel": "Paramètres",
+  "personalTasksTitle": "Tâches Personnelles",
+  "greenTasksTitle": "Tâches Environnementales",
+  "availableSettingLanguageLabel": "Langue",
+  "availableSettingLanguageDescription": "ITA, ESP, FRA, ENG",
+  "availableSettingThemeLabel": "Thème sombre",
+  "availableSettingThemeDescription": "Choisissez entre clair et sombre",
+  "selectOptionLabel": "Choisissez une option",
+  "tasksOnlyCompleted": "Afficher uniquement les terminées",
+  "tasksAll": "Afficher toutes les tâches",
+  "createNewTaskTitle": "Créer une nouvelle tâche",
+  "editTaskTitle": "Modifier la tâche",
+  "saveTaskLabel": "Enregistrer",
+  "taskNamePlaceholder": "Nom de la tâche",
+  "personalCategoryLabel": "Personnel",
+  "greenCategoryLabel": "Environnemental",
+  "retryLabel": "Réessayer",
+  "successMessage": "Tâche créée/modifiée avec succès!",
+  "errorMessage": "Une erreur est survenue, réessayez ou contactez le support.",
+  "createAgain": "Créer une nouvelle",
+  "closeLabel": "Fermer",
+  "fieldErrorMessage": "Ce champ est requis!",
+  "homepageTitle": "Tâches en vedette",
+  "emptyTasksListMessage": "Aucune tâche trouvée"
+}
