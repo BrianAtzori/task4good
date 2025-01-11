@@ -31,7 +31,7 @@ In simple, you can:
 - Switch language
 - Let your eyes rest with dark mode
 
-## THESE PROJECT IS BUILT WITH 🏗️
+## THIS PROJECT IS BUILT WITH 🏗️
 - React Native
 - Redux as state manager
 - MMKV as Local DB
